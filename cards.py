@@ -21,7 +21,7 @@ class Bishop(Card):
     name = "Bishop"
     def get_logic(self):
         def act_on_board(board):
-            board.max_rich_player().gold -= 2
+            board.max_rich_player()[0].gold -= 2
             board.current_player.gold += 2
         return act_on_board
 
