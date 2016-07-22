@@ -1,0 +1,7 @@
+Zalozenia*.txt
+_fabfile.py
+*.pyc
+.vscode
+*_gitignore
+.zfbrc.py
+play.log
