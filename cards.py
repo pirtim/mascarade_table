@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import division
 
 class Card(object):
     def get_logic(self):
@@ -63,3 +65,13 @@ class Spy(Card):
             board.potential_exchange(second_player, execute)
         return act_on_board
 
+cards = {
+    'King' : King,
+    'Queen' : Queen,
+    'Bishop' : Bishop,
+    'Judge' : Judge,
+    'Thief' : Thief,
+    'Cheat' : Cheat,
+    'Witch' : Witch,
+    'Spy' : Spy,
+}

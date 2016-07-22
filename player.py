@@ -25,3 +25,4 @@ class Player(object):
 
     def get_repr(self):
         return '{}:{}({})'.format(self.index, self.name, self.gold)
+        

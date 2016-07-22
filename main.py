@@ -15,18 +15,21 @@ example_players_names = example_players_names_M + example_players_names_F
 def play(players_num = 2, players_names = None, cards_names = None):
     if players_names == None:
         players_names = example_players_names[:players_num]
+
+    if cards_names == None:
+        cards_names = ['King'] * players_num
+        
     mygame = Board(players_num, players_names, cards_names)
     end_of_game = False
     while not end_of_game:
         end_of_game = mygame.next_step()
-    # print mygame.players['Chris'].gold
 
 if __name__ == '__main__':    
     logging.basicConfig(format='%(levelname)s:%(message)s', filename='play.log', 
                         filemode='w', level=logging.DEBUG)
     logging.info('Started')
-    play(players_num = 3)
-    logging.info('Finished')
 
+    cards_names = ['King'] * 2 + ['Queen']
+    play(players_num = 3, cards_names = cards_names)
     
-    
+    logging.info('Finished')

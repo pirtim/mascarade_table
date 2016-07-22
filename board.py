@@ -17,13 +17,17 @@ class Board(object):
         self.players_names = players_names
         self.players = OrderedDict()
         for index, name in enumerate(self.players_names):
-            self.players[name] = Player(index, name, cards.King())
+            self.players[name] = Player(index, name, cards.cards[cards_names[index]]())
         self.current_player = self.players.items()[0][1]
         self.court = 0
         self.round_num = 0
 
+    def reshufle_cards(self):
+        return NotImplemented
+
     def next_step(self):
         logging.info('Start of round number {}'.format(self.round_num))
+        logging.debug('Players Cards: {}'.format(self.cards_from_players()))
         logging.debug('Players Gold: {}'.format(self.gold_from_players()))
 
         print '{}({}), what do you do?'.format(self.current_player.name, self.current_player.gold)
@@ -40,14 +44,23 @@ class Board(object):
             second_player = raw_input('Which player?')
             if second_player not in self.players_names:
                 raise ValueError
+            second_player = self.players[second_player]
 
             execute = raw_input('Execute [Y/N]?').upper()
-            if execute != 'Y' or execute != 'N':
+            if execute != 'Y' and execute != 'N':
                 raise ValueError 
             
-            logging.info('Player: ' + self.current_player.get_repr() + ' has exchanged with ' + second_player + '.')
+            logging.info('Player: ' 
+                + self.current_player.get_repr() 
+                + ' has '
+                + str('not' if execute == 'N' else '')
+                + ' exchanged '
+                + self.current_player.card.name
+                + ' for '
+                + second_player.card.name
+                + ' with ' 
+                + second_player.get_repr() + '.')
             self.current_player.potential_exchange(second_player, execute == 'Y')
-
         else:
             raise ValueError
 
@@ -72,6 +85,9 @@ class Board(object):
     
     def gold_from_players(self):
         return {key:value.gold for key, value in self.players.iteritems()}
+
+    def cards_from_players(self):
+        return {key:value.card.name for key, value in self.players.iteritems()}
 
     def check_end_condition(self):
         'przepisac'
