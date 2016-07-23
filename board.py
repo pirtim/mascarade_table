@@ -56,13 +56,10 @@ class Board(object):
 
         print '{}, what do you do?'.format(self.current_player.get_repr())
         decision = prompt_for_choice(['PEEK', 'ANNOUNCE', 'EXCHANGE'])
-
         if decision == 'PEEK':            
             self.current_player.peek_card()
-
         elif decision == 'ANNOUNCE':
-            self.announcement()          
-
+            self.announcement()
         elif decision == 'EXCHANGE':
             self.current_player.potential_exchange_handler(self.players, self.players_names)
 
@@ -78,7 +75,6 @@ class Board(object):
     def announcement(self):
         print 'What do you announce?'
         what_declare = prompt_for_choice(set(self.cards_names))
-
         logging.info('Player: ' + self.current_player.get_repr() + ' has declared ' 
                     + what_declare + '.')
 

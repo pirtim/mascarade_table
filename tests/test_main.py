@@ -20,16 +20,18 @@ class Test_errors_play(unittest.TestCase):
     def test___init__(self):
         self.assertRaises(ValueError, play, 3, ['Tom', 'Bob'], ['King', 'Queen', 'Bishop'])
         self.assertRaises(ValueError, play, 3, ['Tom', 'Bob', 'Mat'], ['King', 'Queen'])
+        self.assertRaises(ValueError, play, 2, ['Tom', 'Bob', 'Mat'], ['King', 'Queen'])
 
 class Test_play(unittest.TestCase):
     def setUp(self):
-        # self.p = Player(0, 'Tom', King())
-        self.b = Board(3,['Tom','Ben','Mat'], ['King', 'Queen', 'King'])
+        pass
+        # self.b = Board(3,['Tom','Ben','Mat'], ['King', 'Queen', 'King'])
         # help_set_up()
+
+    # def test_normal_play(self):
 
     def tearDown(self):
         pass
-        # help_tear_down()
 
 if __name__ == '__main__':
     unittest.main()

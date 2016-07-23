@@ -6,3 +6,4 @@ _fabfile.py
 .zfbrc.py
 play.log
 _test_worker_bucket.py
+.cache

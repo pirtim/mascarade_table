@@ -12,10 +12,14 @@ example_players_names_M = ['Chris', 'Tom', 'Marcus', 'Bob', 'Adam', 'Iris']
 example_players_names_F = ['Iris', 'Eve', 'Julie', 'Lisa', 'Mary', 'Tara']
 example_players_names = example_players_names_M + example_players_names_F
 
-def play(players_num = 2, players_names = None, cards_names = None):
+def play(players_num=3, players_names=None, cards_names=None):
+    if players_num < 3:
+        raise ValueError
+    if players_num > len(players_names) or players_num > len(cards_names):
+        raise ValueError
+        
     if players_names == None:
         players_names = example_players_names[:players_num]
-
     if cards_names == None:
         cards_names = ['King'] * players_num
         
@@ -25,11 +29,11 @@ def play(players_num = 2, players_names = None, cards_names = None):
         end_of_game = mygame.next_step()
 
 if __name__ == '__main__':    
-    logging.basicConfig(format='%(levelname)s:%(message)s', filename='play.log', 
+    logging.basicConfig(format='%(levelname)s:%(message)s', filename='play.log',
                         filemode='w', level=logging.INFO)
     logging.info('Started')
 
-    cards_names = ['King'] * 2 + ['Queen']
-    play(players_num = 3, cards_names = cards_names)
+    cards_names = ['King', 'Queen', 'Judge']
+    play(players_num=3, cards_names=cards_names)
     
     logging.info('Finished')
