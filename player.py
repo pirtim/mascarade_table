@@ -14,7 +14,7 @@ class Player(object):
         self.gold = 8
 
     def peek_card(self):
-        pass
+        logging.info('Player: ' + self.get_repr() + ' has peeeked.')
 
     def play_card(self, board):
         self.card.get_logic()(board)

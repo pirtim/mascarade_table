@@ -5,6 +5,7 @@ import logging
 from collections import namedtuple, OrderedDict
 import operator
 import functools
+from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
 
 import cards
 from player import Player
@@ -53,53 +54,47 @@ class Board(object):
         logging.debug('Players Cards: {}'.format(self.method_from_players('card.name')))
         logging.debug('Players Gold: {}'.format(self.method_from_players('gold')))
 
-        print '\n{}({}), what do you do?'.format(self.current_player.name, self.current_player.gold)
-        decision = raw_input('PEEK, DECL, EXCH?').upper()
-        if decision == 'PEEK' or decision == 'P':
-            logging.info('Player: ' + self.current_player.get_repr() + ' has peeeked.')
+        print '{}, what do you do?'.format(self.current_player.get_repr())
+        decision = prompt_for_choice(['PEEK', 'ANNOUNCE', 'EXCHANGE'])
+
+        if decision == 'PEEK':            
             self.current_player.peek_card()
 
-        elif decision == 'DECL' or decision == 'D':
-            what_declare = raw_input('What do you declare? {}'.format(set(self.cards_names)))
-            if what_declare not in self.cards_names:
-                raise ValueError
+        elif decision == 'ANNOUNCE':
+            print 'What do you announce?'
+            what_declare = prompt_for_choice(set(self.cards_names))
+
             logging.info('Player: ' + self.current_player.get_repr() + ' has declared ' 
                         + what_declare + '.')
 
             # for name, index in gen_next_players_list(self.method_from_players('index').items(), self.current_player.index):
             for name in gen_next_players_list(self.players_names, self.current_player.index):
-                execute = raw_input('{} are  [Y/N]?').upper()
-                if execute != 'Y' and execute != 'N':
-                    raise ValueError 
-            
-                print name
-                # ble ble glupie, iteracja
-            # print self.method_from_players('card.name')
+                claim = prompt_for_confirmation('{}, do you claim {} yourself?'.format(
+                                                self.players[name].get_repr(), what_declare))
+                if claim:
+                    print name
+                # print self.method_from_players('card.name')
 
             logging.info('Player: ' + self.current_player.get_repr() + ' has declared ' + self.current_player.card.name + '.')
             self.current_player.play_card(self)
 
-        elif decision == 'EXCH' or decision == 'E':
-            second_player = raw_input('Which player?')
-            if second_player not in self.players_names:
-                raise ValueError
+        elif decision == 'EXCHANGE':
+            print 'Which player?'
+            second_player = prompt_for_choice(self.players_names)
             second_player = self.players[second_player]
-
-            execute = raw_input('Execute [Y/N]?').upper()
-            if execute != 'Y' and execute != 'N':
-                raise ValueError 
+            execute = prompt_for_confirmation('Execute?')
             
-            logging.info('Player: ' 
-                + self.current_player.get_repr() 
+            logging.info('Player: '
+                + self.current_player.get_repr()
                 + ' has'
                 + str(' not ' if execute == 'N' else ' ')
                 + 'exchanged '
                 + self.current_player.card.name
                 + ' for '
                 + second_player.card.name
-                + ' with ' 
+                + ' with '
                 + second_player.get_repr() + '.')
-            self.current_player.potential_exchange(second_player, execute == 'Y')
+            self.current_player.potential_exchange(second_player, execute)
         else:
             raise ValueError
 
