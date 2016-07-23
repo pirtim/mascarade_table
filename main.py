@@ -26,7 +26,7 @@ def play(players_num = 2, players_names = None, cards_names = None):
 
 if __name__ == '__main__':    
     logging.basicConfig(format='%(levelname)s:%(message)s', filename='play.log', 
-                        filemode='w', level=logging.DEBUG)
+                        filemode='w', level=logging.INFO)
     logging.info('Started')
 
     cards_names = ['King'] * 2 + ['Queen']

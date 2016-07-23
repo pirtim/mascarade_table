@@ -61,42 +61,10 @@ class Board(object):
             self.current_player.peek_card()
 
         elif decision == 'ANNOUNCE':
-            print 'What do you announce?'
-            what_declare = prompt_for_choice(set(self.cards_names))
-
-            logging.info('Player: ' + self.current_player.get_repr() + ' has declared ' 
-                        + what_declare + '.')
-
-            # for name, index in gen_next_players_list(self.method_from_players('index').items(), self.current_player.index):
-            for name in gen_next_players_list(self.players_names, self.current_player.index):
-                claim = prompt_for_confirmation('{}, do you claim {} yourself?'.format(
-                                                self.players[name].get_repr(), what_declare))
-                if claim:
-                    print name
-                # print self.method_from_players('card.name')
-
-            logging.info('Player: ' + self.current_player.get_repr() + ' has declared ' + self.current_player.card.name + '.')
-            self.current_player.play_card(self)
+            self.announcement()          
 
         elif decision == 'EXCHANGE':
-            print 'Which player?'
-            second_player = prompt_for_choice(self.players_names)
-            second_player = self.players[second_player]
-            execute = prompt_for_confirmation('Execute?')
-            
-            logging.info('Player: '
-                + self.current_player.get_repr()
-                + ' has'
-                + str(' not ' if execute == 'N' else ' ')
-                + 'exchanged '
-                + self.current_player.card.name
-                + ' for '
-                + second_player.card.name
-                + ' with '
-                + second_player.get_repr() + '.')
-            self.current_player.potential_exchange(second_player, execute)
-        else:
-            raise ValueError
+            self.current_player.potential_exchange_handler(self.players, self.players_names)
 
         if self.check_end_condition():
             logging.info('End of game at round number {}'.format(self.round_num))
@@ -107,12 +75,46 @@ class Board(object):
         self.next_player()
         return False
 
+    def announcement(self):
+        print 'What do you announce?'
+        what_declare = prompt_for_choice(set(self.cards_names))
+
+        logging.info('Player: ' + self.current_player.get_repr() + ' has declared ' 
+                    + what_declare + '.')
+
+        # for name, index in gen_next_players_list(self.method_from_players('index').items(), self.current_player.index):
+        claimants = []
+        for name in gen_next_players_list(self.players_names, self.current_player.index):
+            claim = prompt_for_confirmation('{}, do you claim {} yourself?'.format(
+                                            self.players[name].get_repr(), what_declare))
+            if claim:
+                claimants.append(name) 
+                logging.info('{} has claimed {}.'.format(self.players[name].get_repr(), what_declare))
+
+        if claimants:
+            claimants = [self.current_player.name] + claimants            
+            claimants_with_cards = self.method_from_players('card.name', claimants)            
+
+            for name, card_name in claimants_with_cards.iteritems():
+                if card_name == what_declare:
+                    self.players[name].play_card(self)
+                    logging.info('{} said the truth. He is a {}.'.format(self.players[name].get_repr(), what_declare))
+                else:
+                    self.players[name].gold -= 1 
+                    self.court += 1
+                    logging.info('{} lied. He really is a {}, not a {}.'.format(self.players[name].get_repr(), self.players[name].card.name, what_declare))
+
     def next_player(self):
         self.current_player = self.players.items()[(self.current_player.index + 1) % self.players_num][1]
         self.round_num += 1    
 
-    def method_from_players(self, method):
-        return OrderedDict([(key,rgetattr(value, method)) for key, value in self.players.iteritems()])
+    def method_from_players(self, method, players = None):
+        if players == None:
+            players = self.players
+        if hasattr(players, 'iteritems'):
+            return OrderedDict([(key,rgetattr(value, method)) for key, value in players.iteritems()])
+        else:
+            return OrderedDict([(name,rgetattr(self.players[name], method)) for name in self.players])
 
     def check_end_condition(self):
         'przepisac'

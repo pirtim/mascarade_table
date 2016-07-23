@@ -5,3 +5,4 @@ _fabfile.py
 *_gitignore
 .zfbrc.py
 play.log
+_test_worker_bucket.py
