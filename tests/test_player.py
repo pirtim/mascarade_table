@@ -13,8 +13,8 @@ from ..cards import King, Queen
 
 class Test_Player(unittest.TestCase):
     def setUp(self):
-        self.p = player.Player(0, 'Tom', King())
-        self.sp = player.Player(1, 'Mark', Queen())
+        self.p = player.Player(0, 'Tom', King(), 6)
+        self.sp = player.Player(1, 'Mark', Queen(), 6)
         self.players_names = ['Tom', 'Mark']
         self.players = OrderedDict(zip(self.players_names,[self.p, self.sp]))
         # help_set_up()
@@ -24,8 +24,9 @@ class Test_Player(unittest.TestCase):
         self.assertEqual(self.p.name, 'Tom')
         self.assertIsInstance(self.p.card, King)
         self.assertEqual(self.p.card.name, 'King')
-        self.assertEqual(self.p.gold, 8)
+        self.assertEqual(self.p.gold, 6)
 
+#~ http://stackoverflow.com/questions/6271947/how-can-i-simulate-input-to-stdin-for-pyunit
     def test_potential_exchange_handler(self):
         self.p.potential_exchange = Mock()
         with patch.object(player, 'prompt_for_choice', create=True, return_value='Mark'):
@@ -48,7 +49,7 @@ class Test_Player(unittest.TestCase):
         self.assertIsInstance(self.sp.card, Queen)
 
     def test_get_repr(self):
-        self.assertEqual(self.p.get_repr(), '0:Tom(8)')
+        self.assertEqual(self.p.get_repr(), '0:Tom(6)')
 
     def tearDown(self):
         pass

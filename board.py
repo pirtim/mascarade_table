@@ -10,10 +10,6 @@ from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
 import cards
 from player import Player
 
-example_players_names_M = ['Chris', 'Tom', 'Marcus', 'Bob', 'Adam', 'Iris']
-example_players_names_F = ['Iris', 'Eve', 'Julie', 'Lisa', 'Mary', 'Tara']
-example_players_names = example_players_names_M + example_players_names_F
-
 # http://stackoverflow.com/a/31174427
 def rsetattr(obj, attr, val):
     pre, _, post = attr.rpartition('.')
@@ -35,13 +31,13 @@ def gen_next_players_list(players_list, index):
         yield i
 
 class Board(object):
-    def __init__(self, players_num, players_names, cards_names = None):
+    def __init__(self, players_num, players_names, cards_names, start_gold):
         self.players_num = players_num
         self.players_names = players_names        
         self.cards_names = cards_names
         self.players = OrderedDict()
         for index, name in enumerate(self.players_names):
-            self.players[name] = Player(index, name, cards.cards[cards_names[index]]())
+            self.players[name] = Player(index, name, cards.cards[cards_names[index]](), start_gold)
         self.current_player = self.players.items()[0][1]
         self.court = 0
         self.round_num = 0
@@ -89,7 +85,7 @@ class Board(object):
 
         if claimants:
             claimants = [self.current_player.name] + claimants            
-            claimants_with_cards = self.method_from_players('card.name', claimants)            
+            claimants_with_cards = self.method_from_players('card.name', claimants)         
 
             for name, card_name in claimants_with_cards.iteritems():
                 if card_name == what_declare:
@@ -102,32 +98,34 @@ class Board(object):
 
     def next_player(self):
         self.current_player = self.players.items()[(self.current_player.index + 1) % self.players_num][1]
-        self.round_num += 1    
+        self.round_num += 1
 
-    def method_from_players(self, method, players = None):
+    def method_from_players(self, method, players=None):
         if players == None:
             players = self.players
         if hasattr(players, 'iteritems'):
             return OrderedDict([(key,rgetattr(value, method)) for key, value in players.iteritems()])
         else:
-            return OrderedDict([(name,rgetattr(self.players[name], method)) for name in self.players])
+            return OrderedDict([(name,rgetattr(self.players[name], method)) for name in players])
 
     def check_end_condition(self):
         'przepisac'
         richest = self.max_rich_player()
         poorest = self.min_rich_player()
-        if richest[1] >= 12:
-            return True        
-        if poorest[1] <= 0:
-            return True        
-        return False        
+        if richest[0][1] >= 12:
+            return True
+        if poorest[0][1] <= 0:
+            return True
+        return False
 
-    def max_rich_player(self):        
+    def max_rich_player(self):
         '''Returns tuple(richest_player, his_gold)'''
         gold = self.method_from_players('gold')
-        return max(gold.iteritems(), key=lambda x: x[1])
+        gold_sorted = sorted(gold.iteritems(), key=lambda x:-x[1]) 
+        return filter(lambda x: x[1] == gold_sorted[0][1], gold_sorted)
 
     def min_rich_player(self):        
         '''Returns tuple(poorest_player, his_gold)'''
         gold = self.method_from_players('gold')
-        return min(gold.iteritems(), key=lambda x: x[1])
+        gold_sorted = sorted(gold.iteritems(), key=lambda x:+x[1]) 
+        return filter(lambda x: x[1] == gold_sorted[0][1], gold_sorted)

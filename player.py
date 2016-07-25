@@ -8,11 +8,11 @@ import operator
 from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
 
 class Player(object):
-    def __init__(self, index, name, card):
+    def __init__(self, index, name, card, gold):
         self.index = index
         self.name = name
         self.card = card
-        self.gold = 8
+        self.gold = gold
 
     def peek_card(self):
         logging.info('Player: ' + self.get_repr() + ' has peeeked.')

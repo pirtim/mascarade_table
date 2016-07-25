@@ -9,15 +9,41 @@ from ..player import Player
 from ..board import Board
 from ..cards import *
 
-class Test_Cards(unittest.TestCase):
+class Test_Board(unittest.TestCase):
     def setUp(self):
-        # self.p = Player(0, 'Tom', King())
-        self.b = Board(3,['Tom','Ben','Mat'], ['King', 'Queen', 'King'])
-        # help_set_up()
+        self.b = Board(3,['Tom','Ben','Mat'], ['King', 'Queen', 'King'],  6)
+
+    def test_max_rich_player1(self):
+        result = self.b.max_rich_player()
+        self.assertIsInstance(result, list) 
+        self.assertEqual(len(result), 3)
+
+    def test_max_rich_player2(self):
+        self.b.players['Tom'].gold += 1
+        result = self.b.max_rich_player()
+        self.assertIsInstance(result, list) 
+        self.assertListEqual(result, [('Tom', 7)]) 
+        self.assertEqual(len(result), 1)
+
+    def test_min_rich_player(self):
+        result = self.b.min_rich_player()
+        self.assertIsInstance(result, list) 
+        self.assertEqual(len(result), 3)
+
+    def test_min_rich_player2(self):
+        self.b.players['Tom'].gold += 1
+        result = self.b.min_rich_player()
+        self.assertIsInstance(result, list) 
+        self.assertListEqual(result, [('Ben', 6), ('Mat', 6)]) 
+        self.assertEqual(len(result), 2)
+
+    def test_end_condition(self):
+        self.assertFalse(self.b.check_end_condition())
+        self.b.players['Tom'].gold = 13
+        self.assertTrue(self.b.check_end_condition())
 
     def tearDown(self):
         pass
-        # help_tear_down()
 
 if __name__ == '__main__':
     unittest.main()
