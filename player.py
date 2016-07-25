@@ -18,7 +18,8 @@ class Player(object):
         logging.info('Player: ' + self.get_repr() + ' has peeeked.')
 
     def play_card(self, board):
-        self.card.get_logic()(board, self)
+        self.card.logic(self, board)
+        # self.card.get_logic()(board, self)
 
     def potential_exchange_handler(self, players, players_names):   
         print 'Which player?'

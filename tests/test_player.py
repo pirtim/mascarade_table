@@ -9,7 +9,9 @@ from mock import patch, MagicMock, Mock
 from .helper_test import *
 # from ..player import Player
 from .. import player
-from ..cards import King, Queen
+from .. import cards
+King, Queen = cards.King, cards.Queen
+# from ..cards import King, Queen
 
 class Test_Player(unittest.TestCase):
     def setUp(self):
@@ -25,6 +27,15 @@ class Test_Player(unittest.TestCase):
         self.assertIsInstance(self.p.card, King)
         self.assertEqual(self.p.card.name, 'King')
         self.assertEqual(self.p.gold, 6)
+
+    def test__play_card(self): 
+        board = Mock()
+        self.p.play_card(board)
+        self.assertEqual(self.p.gold, 9)
+        board.assert_not_called()
+        self.sp.play_card(board)
+        self.assertEqual(self.sp.gold, 8)
+        board.assert_not_called()
 
 #~ http://stackoverflow.com/questions/6271947/how-can-i-simulate-input-to-stdin-for-pyunit
     def test_potential_exchange_handler(self):

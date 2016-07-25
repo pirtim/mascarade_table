@@ -10,6 +10,12 @@ from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
 import cards
 from player import Player
 
+# dodac named tuple na (player, val), bedzie ladniej
+PlayerVal = namedtuple('PlayerVal', ['name', 'val'])
+OrderedDictPlayers = OrderedDict
+OrderedDictPlayers.items_p = lambda self: [PlayerVal(key, val) for key, val in self.items()]
+OrderedDictPlayers.iteritems_p = lambda self: (PlayerVal(key, val) for key, val in self.iteritems())
+
 # http://stackoverflow.com/a/31174427
 def rsetattr(obj, attr, val):
     pre, _, post = attr.rpartition('.')
@@ -104,28 +110,28 @@ class Board(object):
         if players == None:
             players = self.players
         if hasattr(players, 'iteritems'):
-            return OrderedDict([(key,rgetattr(value, method)) for key, value in players.iteritems()])
+            return OrderedDictPlayers([(key,rgetattr(value, method)) for key, value in players.iteritems()])
         else:
-            return OrderedDict([(name,rgetattr(self.players[name], method)) for name in players])
+            return OrderedDictPlayers([(name,rgetattr(self.players[name], method)) for name in players])
 
     def check_end_condition(self):
         'przepisac'
         richest = self.max_rich_player()
         poorest = self.min_rich_player()
-        if richest[0][1] >= 12:
+        if richest[0].val >= 12:
             return True
-        if poorest[0][1] <= 0:
+        if poorest[0].val <= 0:
             return True
         return False
 
     def max_rich_player(self):
-        '''Returns tuple(richest_player, his_gold)'''
+        '''Returns list(tuple(richest_player1, his_gold),tuple(richest_player2, his_gold),...)'''
         gold = self.method_from_players('gold')
-        gold_sorted = sorted(gold.iteritems(), key=lambda x:-x[1]) 
-        return filter(lambda x: x[1] == gold_sorted[0][1], gold_sorted)
+        gold_sorted = sorted(gold.iteritems_p(), key=lambda x:-x.val) 
+        return filter(lambda x: x.val == gold_sorted[0].val, gold_sorted)
 
     def min_rich_player(self):        
-        '''Returns tuple(poorest_player, his_gold)'''
+        '''Returns list(tuple(poorest_player1, his_gold),tuple(poorest_player2, his_gold),...)'''
         gold = self.method_from_players('gold')
-        gold_sorted = sorted(gold.iteritems(), key=lambda x:+x[1]) 
-        return filter(lambda x: x[1] == gold_sorted[0][1], gold_sorted)
+        gold_sorted = sorted(gold.iteritems_p(), key=lambda x:+x.val) 
+        return filter(lambda x: x.val == gold_sorted[0].val, gold_sorted)

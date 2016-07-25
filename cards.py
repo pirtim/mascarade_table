@@ -2,68 +2,74 @@
 from __future__ import division
 
 class Card(object):
+    logic = lambda x: None
     def get_logic(self):
         return lambda x: None
 
 class King(Card):
     name = "King"
-    def get_logic(self):
-        def act_on_board(board, player):
-            player.gold += 3
-        return act_on_board
+
+    @staticmethod
+    def act_on_board(player, board):
+        player.gold += 3
+    logic = act_on_board
 
 class Queen(Card):
     name = "Queen"
-    def get_logic(self):
-        def act_on_board(board, player):
-            player.gold += 2
-        return act_on_board
+
+    @staticmethod
+    def act_on_board(player, board):
+        player.gold += 2
+    logic = act_on_board
 
 class Bishop(Card):
     name = "Bishop"
-    def get_logic(self):
-        def act_on_board(board, player):
-            board.max_rich_player()[0].gold -= 2
-            player.gold += 2
-        return act_on_board
+
+    @staticmethod
+    def act_on_board(player, board):
+        name_richest = board.max_rich_player()[0].name
+        board.players[name_richest].gold -= 2
+        player.gold += 2
+    logic = act_on_board
 
 class Judge(Card):
     name = "Judge"
-    def get_logic(self):
-        def act_on_board(board, player):
-            player.gold += board.court
-            board.court = 0
-        return act_on_board
+
+    @staticmethod
+    def act_on_board(player, board):
+        player.gold += board.court
+        board.court = 0
+    logic = act_on_board
 
 class Thief(Card):
     name = "Thief"
-    def get_logic(self):
-        def act_on_board(board, player):
-            board.before_player.gold -= 1
-            board.next_player.gold -= 1
-            player.gold += 2
-        return act_on_board
+    @staticmethod
+    def act_on_board(player, board):
+        board.before_player.gold -= 1
+        board.next_player.gold -= 1
+        player.gold += 2
+    logic = act_on_board
 
 class Cheat(Card):
     name = "Cheat"
-    def get_logic(self):
-        def act_on_board(board, player):
-            board.check_end_condition(cheat = True, cheat_player = player)
-        return act_on_board
+    @staticmethod
+    def act_on_board(player, board):
+        board.check_end_condition(cheat = True, cheat_player = player)
+    logic = act_on_board
 
 class Witch(Card):
     name = "Witch"
-    def get_logic(self):
-        def act_on_board(board, player, second_player):
-            player.gold, second_player.gold = second_player.gold, player.gold
-        return act_on_board
+    @staticmethod
+    def act_on_board(player, board, second_player):
+        player.gold, second_player.gold = second_player.gold, player.gold
+    logic = act_on_board
 
 class Spy(Card):
     name = "Spy"
-    def get_logic(self):
-        def act_on_board(board, player, second_player, execute):
-            board.potential_exchange(second_player, execute)
-        return act_on_board
+    @staticmethod
+    def act_on_board(player, board, second_player, execute):
+        board.potential_exchange(second_player, execute)
+    logic = act_on_board
 
 cards = {
     'King' : King,
