@@ -13,10 +13,8 @@ from ..cards import *
 
 class Test_Cards(unittest.TestCase):
     def setUp(self):
-        # self.p = Player(0, 'Tom', King(), 6)
         self.b = Board(3,['Tom','Ben','Mat'], ['King', 'Queen', 'King'], 6)
-        # help_set_up()
-
+        self.p = self.b.players['Tom']
 
     def test_logic_isfunction(self):
         for card_name, card_cls in cards.iteritems():
@@ -27,13 +25,27 @@ class Test_Cards(unittest.TestCase):
         card = King()
         logic = card.logic
         self.assertEqual(card.name, 'King')
-        self.assertIsInstance(logic, FunctionType)
+        logic(self.p, self.b)
+        self.assertEqual(self.p.gold, 9)
+
+    def test_Queen(self):
+        card = Queen()
+        logic = card.logic
+        self.assertEqual(card.name, 'Queen')
+        logic(self.p, self.b)
+        self.assertEqual(self.p.gold, 8)
+
+    def test_Bishop(self):
+        self.assertEqual(self.p.gold, 6)
+        card = Bishop()
+        logic = card.logic
+        self.assertEqual(card.name, 'Bishop')
+        logic(self.p, self.b)
+        self.assertEqual(self.p.gold, 8)
+
 
     def tearDown(self):
         pass
-        # help_tear_down()
-
-
 
 if __name__ == '__main__':
     unittest.main()
