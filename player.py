@@ -15,6 +15,7 @@ class Player(object):
         self.card = card
         self.gold = gold
         self.bot  = bot
+        self.history = None
 
     def peek_card(self):
         logging.info('Player: ' + self.get_repr() + ' has peeeked.')

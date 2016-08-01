@@ -12,5 +12,5 @@ class SimpleBot(object):
     def __init__(self):
         pass
 
-    def get_move(self):
+    def get_move(self, type_of_move, question, choices=None):
         pass

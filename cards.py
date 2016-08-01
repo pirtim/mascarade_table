@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
+from inputs import input_for_confirmation, input_for_choice
 
 # mozna sobie odpuscic klasy i zrobic to jako zwyczajne funkcje
 

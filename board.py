@@ -6,7 +6,7 @@ import logging
 from collections import namedtuple, OrderedDict
 import operator
 import functools
-from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
+# from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
 
 import cards
 from player import Player
@@ -19,7 +19,12 @@ OrderedDictPlayers = OrderedDict
 OrderedDictPlayers.items_p = lambda self: [PlayerVal(key, val) for key, val in self.items()]
 OrderedDictPlayers.iteritems_p = lambda self: (PlayerVal(key, val) for key, val in self.iteritems())
 
-PublicBoard = namedtuple('PublicBoard', ['players_with_gold'])
+class PublicBoard(object):
+    def __init__(self, players_with_gold, public_history):
+        self.players_with_gold = players_with_gold
+        self.public_history = public_history
+
+# PublicBoard = namedtuple('PublicBoard', ['players_with_gold'])
 
 # http://stackoverflow.com/a/31174427
 def rsetattr(obj, attr, val):
@@ -56,21 +61,29 @@ class Board(object):
         self.current_player = self.players.items()[0][1]
         self.court = 0
         self.round_num = 0
+        self.public_history = None
+        self.true_history = None
+        self.public_board = PublicBoard(self.method_from_players('gold'), self.public_history)
 
-    def get_public_board(self):
-        '''
-        Returns tuple, eg: (OrderedDictPlayers('Tom' : 8, 'Mark' : 6, ...),)
-        Example:
-        >>> my_board = Board(4, ['Tom', 'Mark', 'Bob', 'Chris'], ['King', 'Queen', 'Judge', 'Bishop'],  6)
-        >>> pb = my_board.get_public_board()
-        >>> pb.players_with_gold
-        OrderedDict([('Tom', 6), ('Mark', 6), ('Bob', 6), ('Chris', 6)])
-        >>> pb.players_with_gold['Tom']
-        6
-        >>> pb.players_with_gold.items_p()[0].name
-        'Tom'
-        '''
-        return PublicBoard(self.method_from_players('gold'))
+        for name, player in self.players.iteritems():
+            # czy to zadziala?
+            if player.bot != None:
+                player.bot.public_board = self.public_board
+
+    # def get_public_board(self):
+    #     '''
+    #     Returns tuple, eg: (OrderedDictPlayers('Tom' : 8, 'Mark' : 6, ...), PublicHistory())
+    #     Example:
+    #     >>> my_board = Board(4, ['Tom', 'Mark', 'Bob', 'Chris'], ['King', 'Queen', 'Judge', 'Bishop'],  6)
+    #     >>> pb = my_board.get_public_board()
+    #     >>> pb.players_with_gold
+    #     OrderedDict([('Tom', 6), ('Mark', 6), ('Bob', 6), ('Chris', 6)])
+    #     >>> pb.players_with_gold['Tom']
+    #     6
+    #     >>> pb.players_with_gold.items_p()[0].name
+    #     'Tom'
+    #     '''
+    #     return PublicBoard(self.method_from_players('gold'), self.public_history)
 
     def reshufle_cards(self):
         return NotImplemented

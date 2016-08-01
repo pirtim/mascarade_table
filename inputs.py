@@ -7,11 +7,11 @@ def input_for_confirmation(player, question):
     if player.bot == None:
         return prompt_for_confirmation(question)
     else:
-        return player.bot.get_confirmation(question)
+        return player.bot.get_move('confirmation', question)
 
 def input_for_choice(player, question, choices):
     if player.bot == None:
         print question
         return prompt_for_choice(choices)
     else:
-        return player.bot.get_choice(question, choices)
+        return player.bot.get_move('choices', question, choices)
