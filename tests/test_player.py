@@ -10,6 +10,7 @@ from .helper_test import *
 # from ..player import Player
 from .. import player
 from .. import cards
+from .. import inputs
 King, Queen = cards.King, cards.Queen
 # from ..cards import King, Queen
 
@@ -40,9 +41,14 @@ class Test_Player(unittest.TestCase):
 #~ http://stackoverflow.com/questions/6271947/how-can-i-simulate-input-to-stdin-for-pyunit
     def test_potential_exchange_handler(self):
         self.p.potential_exchange = Mock()
-        with patch.object(player, 'prompt_for_choice', create=True, return_value='Mark'):
-            with patch.object(player, 'prompt_for_confirmation', create=True, return_value=True):
+        # with patch.object(player, 'prompt_for_choice', create=True, return_value='Mark'):
+        #     with patch.object(player, 'prompt_for_confirmation', create=True, return_value=True):
+        #         self.p.potential_exchange_handler(self.players, self.players_names)
+        
+        with patch.object(inputs, 'prompt_for_choice', create=True, return_value='Mark'):
+            with patch.object(inputs, 'prompt_for_confirmation', create=True, return_value=True):
                 self.p.potential_exchange_handler(self.players, self.players_names)
+        
         self.p.potential_exchange.assert_called_once_with(self.sp, True)
 
     def test_potential_exchange_execute(self):

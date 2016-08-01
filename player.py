@@ -5,14 +5,16 @@ import logging
 from collections import namedtuple, OrderedDict
 import cards
 import operator
-from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
+# from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
+from inputs import input_for_confirmation, input_for_choice
 
 class Player(object):
-    def __init__(self, index, name, card, gold):
+    def __init__(self, index, name, card, gold, bot=None):
         self.index = index
         self.name = name
         self.card = card
         self.gold = gold
+        self.bot  = bot
 
     def peek_card(self):
         logging.info('Player: ' + self.get_repr() + ' has peeeked.')
@@ -22,10 +24,16 @@ class Player(object):
         # self.card.get_logic()(board, self)
 
     def potential_exchange_handler(self, players, players_names):   
-        print 'Which player?'
-        second_player = prompt_for_choice(players_names)
+        # print 'Which player?'
+        # second_player = prompt_for_choice(players_names)
+
+        question = 'Which player?'
+        choices = players_names
+        second_player = input_for_choice(self, question, choices)
+
         second_player = players[second_player]
-        execute = prompt_for_confirmation('Execute?')
+        # execute = prompt_for_confirmation('Execute?')        
+        execute = input_for_confirmation(self, question='Execute?')
         
         logging.info('Player: '
             + self.get_repr()

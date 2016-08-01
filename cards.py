@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import division
 
+# mozna sobie odpuscic klasy i zrobic to jako zwyczajne funkcje
+
 class Card(object):
     logic = lambda x: None
     def get_logic(self):

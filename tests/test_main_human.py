@@ -8,7 +8,7 @@ from .helper_test import *
 from ..player import Player
 from ..board import Board
 from ..cards import *
-from ..main import example_players_names, play
+from ..main_human import example_players_names, play
 
 class Test_variables(unittest.TestCase):
     def test__example(self):

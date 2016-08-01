@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+#pylint: disable=W1202
 from __future__ import division
 
 import logging
@@ -9,12 +10,16 @@ from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
 
 import cards
 from player import Player
+from inputs import input_for_confirmation, input_for_choice
+
 
 # dodac named tuple na (player, val), bedzie ladniej
 PlayerVal = namedtuple('PlayerVal', ['name', 'val'])
 OrderedDictPlayers = OrderedDict
 OrderedDictPlayers.items_p = lambda self: [PlayerVal(key, val) for key, val in self.items()]
 OrderedDictPlayers.iteritems_p = lambda self: (PlayerVal(key, val) for key, val in self.iteritems())
+
+PublicBoard = namedtuple('PublicBoard', ['players_with_gold'])
 
 # http://stackoverflow.com/a/31174427
 def rsetattr(obj, attr, val):
@@ -37,16 +42,35 @@ def gen_next_players_list(players_list, index):
         yield i
 
 class Board(object):
-    def __init__(self, players_num, players_names, cards_names, start_gold):
+    def __init__(self, players_num, players_names, cards_names, start_gold, bots=None):
         self.players_num = players_num
+        self.bots = bots
         self.players_names = players_names        
         self.cards_names = cards_names
         self.players = OrderedDict()
         for index, name in enumerate(self.players_names):
-            self.players[name] = Player(index, name, cards.cards[cards_names[index]](), start_gold)
+            if bots != None:
+                self.players[name] = Player(index, name, cards.cards[cards_names[index]](), start_gold, bots[index])
+            else:
+                self.players[name] = Player(index, name, cards.cards[cards_names[index]](), start_gold)
         self.current_player = self.players.items()[0][1]
         self.court = 0
         self.round_num = 0
+
+    def get_public_board(self):
+        '''
+        Returns tuple, eg: (OrderedDictPlayers('Tom' : 8, 'Mark' : 6, ...),)
+        Example:
+        >>> my_board = Board(4, ['Tom', 'Mark', 'Bob', 'Chris'], ['King', 'Queen', 'Judge', 'Bishop'],  6)
+        >>> pb = my_board.get_public_board()
+        >>> pb.players_with_gold
+        OrderedDict([('Tom', 6), ('Mark', 6), ('Bob', 6), ('Chris', 6)])
+        >>> pb.players_with_gold['Tom']
+        6
+        >>> pb.players_with_gold.items_p()[0].name
+        'Tom'
+        '''
+        return PublicBoard(self.method_from_players('gold'))
 
     def reshufle_cards(self):
         return NotImplemented
@@ -58,6 +82,11 @@ class Board(object):
 
         print '{}, what do you do?'.format(self.current_player.get_repr())
         decision = prompt_for_choice(['PEEK', 'ANNOUNCE', 'EXCHANGE'])
+    
+        # question = '{}, what do you do?'.format(self.current_player.get_repr())
+        # choices = ['PEEK', 'ANNOUNCE', 'EXCHANGE']
+        # decision = input_for_choice(self.current_player, question, choices)
+
         if decision == 'PEEK':            
             self.current_player.peek_card()
         elif decision == 'ANNOUNCE':
@@ -124,14 +153,24 @@ class Board(object):
             return True
         return False
 
-    def max_rich_player(self):
+    def max_rich_player(self, all_players = False):
         '''Returns list(tuple(richest_player1, his_gold),tuple(richest_player2, his_gold),...)'''
         gold = self.method_from_players('gold')
-        gold_sorted = sorted(gold.iteritems_p(), key=lambda x:-x.val) 
-        return filter(lambda x: x.val == gold_sorted[0].val, gold_sorted)
+        gold_sorted = sorted(gold.iteritems_p(), key=lambda x:-x.val)
+        if all_players:
+            return gold_sorted
+        else:   
+            return filter(lambda x: x.val == gold_sorted[0].val, gold_sorted)
 
-    def min_rich_player(self):        
+    def min_rich_player(self, all_players = False):     
         '''Returns list(tuple(poorest_player1, his_gold),tuple(poorest_player2, his_gold),...)'''
         gold = self.method_from_players('gold')
         gold_sorted = sorted(gold.iteritems_p(), key=lambda x:+x.val) 
-        return filter(lambda x: x.val == gold_sorted[0].val, gold_sorted)
+        if all_players:
+            return gold_sorted
+        else:   
+            return filter(lambda x: x.val == gold_sorted[0].val, gold_sorted)
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
