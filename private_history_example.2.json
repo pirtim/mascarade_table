@@ -1,0 +1,107 @@
+// True History .json
+{
+    "history_owner" : "Tom",
+    "game_info": {
+        "players_num" : 4,
+        "players" : [
+            {
+                "name" : "Tom",
+                "type" : "human",
+                "properties" : [],
+                "first_card" : "King"
+                },
+                    
+            {
+                "name" : "Mark",
+                "type" : "bot",
+                "properties" : [
+                    {"type_of_bot" : "SimpleBot"} 
+                    ],
+                "first_card" : "Queen"
+                },
+        
+            {
+                "name" : "Chris",
+                "type" : "bot",
+                "properties" : [
+                    {"type_of_bot" : "MediumBot"}               
+                    ],
+                "first_card" : "Bishop"
+                },
+            
+            {
+                "name" : "Eric",
+                "type" : "bot",
+                "properties" : [
+                    {"type_of_bot" : "HardBot"},
+                    {"args" : ["mo", "no", "a4"]}
+                    ],
+                "first_card" : "Judge"
+                }
+            ],
+        "rules" : [],
+        "result" : {
+            "win" : true,
+            "winner" : "Tom"
+        }
+        },
+    "moves": [
+        {
+            "id" : 1,
+            "player" : "Tom",
+            "type": "PEEK", 
+            "move" : {           
+                "card_peeked" : "King"
+                }
+        },
+        {
+            "id" : 2,
+            "player" : "Mark",
+            "type": "ANNOUNCE", 
+            "move" : {           
+                "card" : "King",
+                "objectors" : ["Tom"],
+                "properties" : [],
+                "result" : {
+                    "announcers_had" : {
+                        "Tom" : "King",
+                        "Mark" : "Queen"
+                    },
+                    "gold_change" : {
+                        "Tom" : 3,
+                        "Mark" : -1,
+                        "_court" : 1
+                    }
+                    }
+                }
+        },
+        {
+            "id" : 3,
+            "player" : "Chris",
+            "type": "EXCHANGE", 
+            "move" : {  
+                "with" : "Tom"
+                }
+        },
+        {
+            "id" : 4,
+            "player" : "Eric",
+            "type": "ANNOUNCE", 
+            "move" : {           
+                "card" : "Bishop",
+                "objectors" : [],
+                "properties" : [
+                    {"richest" : ["Tom"]},
+                    {"choice" : "Tom"}
+                ],
+                "result" : {
+                    "gold_change" : {
+                        "Tom" : -2,
+                        "Eric" : 2
+                    }
+                }
+                }
+        }
+        // ...
+    ]
+}
