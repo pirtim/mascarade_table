@@ -1,4 +1,0 @@
-INFO:Started
-INFO:Start of round number 0
-DEBUG:Players Cards: OrderedDict([('Chris', 'King'), ('Tom', 'Queen'), ('Marcus', 'Judge'), ('Bob', 'Bishop')])
-DEBUG:Players Gold: OrderedDict([('Chris', 6), ('Tom', 6), ('Marcus', 6), ('Bob', 6)])

@@ -63,8 +63,6 @@ class Board(object):
         self.public_board = PublicBoard(self.method_from_players('gold'), self.public_history)
 
         for name, player in self.players.iteritems():
-            # czy to zadziala?
-            # if player.p_type != 'human':
             player.bot.public_board = self.public_board
 
     # def get_public_board(self):
@@ -90,12 +88,12 @@ class Board(object):
         logging.debug('Players Cards: {}'.format(self.method_from_players('card.name')))
         logging.debug('Players Gold: {}'.format(self.method_from_players('gold')))
 
-        print '{}, what do you do?'.format(self.current_player.get_repr())
-        decision = prompt_for_choice(['PEEK', 'ANNOUNCE', 'EXCHANGE'])
+        # print '{}, what do you do?'.format(self.current_player.get_repr())
+        # decision = prompt_for_choice(['PEEK', 'ANNOUNCE', 'EXCHANGE'])
     
-        # question = '{}, what do you do?'.format(self.current_player.get_repr())
-        # choices = ['PEEK', 'ANNOUNCE', 'EXCHANGE']
-        # decision = input_for_choice(self.current_player, question, choices)
+        question = '{}, what do you do?'.format(self.current_player.get_repr())
+        choices = ['PEEK', 'ANNOUNCE', 'EXCHANGE']
+        decision = input_for_choice(self.current_player, question, choices)
 
         if decision == 'PEEK':            
             self.current_player.peek_card()

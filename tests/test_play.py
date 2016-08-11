@@ -35,16 +35,12 @@ class Test_errors_play(unittest.TestCase):
             play(3, ['human', HardBot,'human'], ['Tom', 'Bob', 'Mat'], ['King', 'Queen', 'Bishop'])
 
 class Test_bot_play(unittest.TestCase):
-    def setUp(self):
-        pass
-        # self.b = Board(3,['Tom','Ben','Mat'], ['King', 'Queen', 'King'])
-        # help_set_up()
-
     def test_normal_play(self):
         play(3, [SimpleBot, SimpleBot, SimpleBot], ['Tom', 'Bob', 'Mat'], ['King', 'Queen', 'Bishop'])
 
-    def tearDown(self):
-        pass
+class Test_human_play(unittest.TestCase):
+    def test_normal_play(self):
+        play(3, ['human'] * 3, ['Tom', 'Bob', 'Mat'], ['King', 'Queen', 'Bishop'])
 
 if __name__ == '__main__':
     unittest.main()

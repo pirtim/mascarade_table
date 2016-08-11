@@ -5,5 +5,6 @@ _fabfile.py
 *_gitignore
 .zfbrc.py
 play.log
+logging.log
 _test_worker_bucket.py
 .cache
