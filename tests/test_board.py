@@ -11,7 +11,7 @@ from ..cards import *
 
 class Test_Board(unittest.TestCase):
     def setUp(self):
-        self.b = Board(3,['Tom','Ben','Mat'], ['King', 'Queen', 'King'],  6)
+        self.b = Board(3, human_vec(3), ['Tom','Ben','Mat'], ['King', 'Queen', 'King'],  6)
 
     def test_end_condition_over(self):
         self.assertFalse(self.b.check_end_condition())

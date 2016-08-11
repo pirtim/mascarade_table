@@ -24,11 +24,11 @@ class Test_errors_play(unittest.TestCase):
         with self.assertRaisesRegexp(ValueError, r'Not enough types of players \(should be: 3\)\.'):
             play(3, ['human', 'human'], ['Tom', 'Bob', 'Mat'], ['King', 'Queen', 'Bishop'])
         with self.assertRaisesRegexp(ValueError, r'Not enough names of players \(min: 3\)\.'):
-            play(3, ['human', 'human','human'], ['Tom', 'Bob'], ['King', 'Queen', 'Bishop'])
+            play(3, ['human', 'human', 'human'], ['Tom', 'Bob'], ['King', 'Queen', 'Bishop'])
         with self.assertRaisesRegexp(ValueError, r'Not enough types of cards \(min: 3\)\.'):
-            play(3, ['human', 'human','human'], ['Tom', 'Bob', 'Mat'], ['King', 'Queen'])
+            play(3, ['human', 'human', 'human'], ['Tom', 'Bob', 'Mat'], ['King', 'Queen'])
         with self.assertRaisesRegexp(ValueError, r'Not recognized player type.'):
-            play(3, ['human', 'xuman','human'], ['Tom', 'Bob', 'Mat'], ['King', 'Queen', 'Bishop'])
+            play(3, ['human', 'xuman', 'human'], ['Tom', 'Bob', 'Mat'], ['King', 'Queen', 'Bishop'])
         with self.assertRaisesRegexp(ValueError, r'Not recognized bot type.'):
             class HardBot(object):
                 pass

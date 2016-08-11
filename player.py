@@ -9,12 +9,12 @@ import operator
 from inputs import input_for_confirmation, input_for_choice
 
 class Player(object):
-    def __init__(self, index, name, card, gold, bot=None):
+    def __init__(self, index, bot, name, card, gold):
         self.index = index
+        self.bot = bot
         self.name = name
         self.card = card
         self.gold = gold
-        self.bot  = bot
         self.history = None
 
     def peek_card(self):
@@ -22,7 +22,6 @@ class Player(object):
 
     def play_card(self, board):
         self.card.logic(self, board)
-        # self.card.get_logic()(board, self)
 
     def potential_exchange_handler(self, players, players_names):   
         # print 'Which player?'

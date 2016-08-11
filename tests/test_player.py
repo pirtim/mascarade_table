@@ -11,13 +11,15 @@ from .helper_test import *
 from .. import player
 from .. import cards
 from .. import inputs
+from ..bots import Human
+
 King, Queen = cards.King, cards.Queen
 # from ..cards import King, Queen
 
 class Test_Player(unittest.TestCase):
     def setUp(self):
-        self.p = player.Player(0, 'Tom', King(), 6)
-        self.sp = player.Player(1, 'Mark', Queen(), 6)
+        self.p = player.Player(0, Human(), 'Tom', King(), 6)
+        self.sp = player.Player(1, Human(), 'Mark', Queen(), 6)
         self.players_names = ['Tom', 'Mark']
         self.players = OrderedDict(zip(self.players_names,[self.p, self.sp]))
         # help_set_up()

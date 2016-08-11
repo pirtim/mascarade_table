@@ -47,17 +47,14 @@ def gen_next_players_list(players_list, index):
         yield i
 
 class Board(object):
-    def __init__(self, players_num, players_names, cards_names, start_gold, bots=None):
+    def __init__(self, players_num, types_of_players, players_names, cards_names, start_gold):
         self.players_num = players_num
-        self.bots = bots
+        self.types_of_players = types_of_players
         self.players_names = players_names        
         self.cards_names = cards_names
         self.players = OrderedDict()
-        for index, name in enumerate(self.players_names):
-            if bots != None:
-                self.players[name] = Player(index, name, cards.cards[cards_names[index]](), start_gold, bots[index])
-            else:
-                self.players[name] = Player(index, name, cards.cards[cards_names[index]](), start_gold)
+        for index, (Bot, name, card_name) in enumerate(zip(self.types_of_players, self.players_names, self.cards_names)):
+            self.players[name] = Player(index, Bot(), name, cards.cards[card_name](), start_gold)
         self.current_player = self.players.items()[0][1]
         self.court = 0
         self.round_num = 0
@@ -67,8 +64,8 @@ class Board(object):
 
         for name, player in self.players.iteritems():
             # czy to zadziala?
-            if player.bot != None:
-                player.bot.public_board = self.public_board
+            # if player.p_type != 'human':
+            player.bot.public_board = self.public_board
 
     # def get_public_board(self):
     #     '''

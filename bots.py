@@ -8,10 +8,11 @@ import functools
 
 import cards
 
+class Human(object):
+    def __init__(self):
+        self.public_history = None
+
 class SimpleBot(object):
-    def __str__(self):
-        return 'SimpleBot'
-        
     def __init__(self):
         self.public_history = None
 

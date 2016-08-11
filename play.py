@@ -8,7 +8,7 @@ import operator
 import cards
 from player import Player
 from board import Board
-from bots import SimpleBot
+from bots import SimpleBot, Human
 
 example_players_names_M = ['Chris', 'Tom', 'Marcus', 'Bob', 'Adam', 'Iris']
 example_players_names_F = ['Iris', 'Eve', 'Julie', 'Lisa', 'Mary', 'Tara']
@@ -17,11 +17,13 @@ example_players_names = example_players_names_M + example_players_names_F
 def rewrite_player_type(player_type):
     if type(player_type) == str:
         if player_type.upper() == 'H' or player_type.upper() == 'HUMAN':
-            return 'human'
+            return Human
         else:
             print player_type, type(player_type)
             raise ValueError('Not recognized player type. Get: "{}", should be: "human" or type of bot.'.format(player_type))
-    elif not issubclass(player_type, SimpleBot):
+    elif issubclass(player_type, SimpleBot) or player_type == Human:
+        return player_type
+    else:
         raise ValueError('Not recognized bot type. Get: {}, should be subclass of: SimpleBot.'.format(player_type.__name__))
 
 def play(players_num, types_of_players, players_names=None, cards_names=None, start_gold=6):
@@ -51,6 +53,6 @@ if __name__ == '__main__':
     logging.info('Started')
 
     cards_names = ['King', 'Queen', 'Judge', 'Bishop']
-    play(players_num=4, types_of_players=['human', 'human', 'human', 'human'], cards_names=cards_names)
+    play(players_num=4, types_of_players=[Human, Human, Human, Human], cards_names=cards_names)
     
     logging.info('Finished')

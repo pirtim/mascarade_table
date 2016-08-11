@@ -13,7 +13,7 @@ from ..cards import *
 
 class Test_Cards(unittest.TestCase):
     def setUp(self):
-        self.b = Board(3,['Tom','Ben','Mat'], ['King', 'Queen', 'King'], 6)
+        self.b = Board(3,human_vec(3), ['Tom','Ben','Mat'], ['King', 'Queen', 'King'], 6)
         self.p = self.b.players['Tom']
 
     def test_logic_isfunction(self):
