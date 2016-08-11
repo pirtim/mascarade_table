@@ -47,12 +47,6 @@ def play(players_num, types_of_players, players_names=None, cards_names=None, st
     while not end_of_game:
         end_of_game = mygame.next_step()
 
-if __name__ == '__main__':    
-    logging.basicConfig(format='%(levelname)s:%(message)s', filename='logging.log',
-                        filemode='w', level=logging.DEBUG)
-    logging.info('Started')
-
-    cards_names = ['King', 'Queen', 'Judge', 'Bishop']
-    play(players_num=4, types_of_players=[Human, Human, Human, Human], cards_names=cards_names)
-    
-    logging.info('Finished')
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

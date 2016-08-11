@@ -6,8 +6,6 @@ from collections import namedtuple, OrderedDict
 import operator
 import functools
 
-import cards
-
 class Human(object):
     def __init__(self):
         self.public_history = None
