@@ -13,6 +13,7 @@ example_players_names_M = ['Chris', 'Tom', 'Marcus', 'Bob', 'Adam', 'Iris']
 example_players_names_F = ['Iris', 'Eve', 'Julie', 'Lisa', 'Mary', 'Tara']
 example_players_names = example_players_names_M + example_players_names_F
 
+
 def play(players_num=4, players_names=None, cards_names=None, start_gold=6):
     if players_names == None:
         players_names = example_players_names[:players_num]
@@ -38,3 +39,4 @@ if __name__ == '__main__':
     play(players_num=3, cards_names=cards_names)
     
     logging.info('Finished')
+    

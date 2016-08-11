@@ -9,8 +9,11 @@ import functools
 import cards
 
 class SimpleBot(object):
+    def __str__(self):
+        return 'SimpleBot'
+        
     def __init__(self):
-        pass
+        self.public_history = None
 
     def get_move(self, type_of_move, question, choices=None):
         pass
