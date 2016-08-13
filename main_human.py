@@ -11,7 +11,7 @@ if __name__ == '__main__':
     logging.info('Started')
     N = 3
     my_minds = ['human'] * N
-    cards_names = ['King', 'Queen', 'Judge']
+    cards_names = ['King', 'Queen', 'Bishop']
     play(players_num=3,  types_of_players=my_minds, cards_names=cards_names)
     
     logging.info('Finished')

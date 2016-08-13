@@ -3,7 +3,9 @@ import datetime
 import uuid
 import logging
 from collections import namedtuple
+from mock import patch, MagicMock, Mock
 
+from .. import inputs
 from .helper_test import *
 from ..player import Player
 from ..board import Board
@@ -40,7 +42,9 @@ class Test_bot_play(unittest.TestCase):
 
 class Test_human_play(unittest.TestCase):
     def test_normal_play(self):
-        play(3, ['human'] * 3, ['Tom', 'Bob', 'Mat'], ['King', 'Queen', 'Bishop'])
+        with patch.object(inputs, 'prompt_for_choice', create=True, side_effect = ['ANNOUNCE','King']*4):
+            with patch.object(inputs, 'prompt_for_confirmation', create=True, side_effect = [False]*8):
+                play(3, ['human'] * 3, ['Tom', 'Bob', 'Mat'], ['King', 'Queen', 'Bishop'])
 
 if __name__ == '__main__':
     unittest.main()

@@ -2,16 +2,14 @@
 #pylint: disable=W1202
 from __future__ import division
 
-import logging
-from collections import namedtuple, OrderedDict
-import operator
 import functools
-# from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
+import logging
+import operator
+from collections import OrderedDict, namedtuple
 
 import cards
+from inputs import input_for_choice, input_for_confirmation
 from player import Player
-from inputs import input_for_confirmation, input_for_choice
-
 
 # dodac named tuple na (player, val), bedzie ladniej
 PlayerVal = namedtuple('PlayerVal', ['name', 'val'])
@@ -87,9 +85,6 @@ class Board(object):
         logging.info('Start of round number {}'.format(self.round_num))
         logging.debug('Players Cards: {}'.format(self.method_from_players('card.name')))
         logging.debug('Players Gold: {}'.format(self.method_from_players('gold')))
-
-        # print '{}, what do you do?'.format(self.current_player.get_repr())
-        # decision = prompt_for_choice(['PEEK', 'ANNOUNCE', 'EXCHANGE'])
     
         question = '{}, what do you do?'.format(self.current_player.get_repr())
         choices = ['PEEK', 'ANNOUNCE', 'EXCHANGE']
@@ -112,16 +107,19 @@ class Board(object):
         return False
 
     def announcement(self):
-        print 'What do you announce?'
-        what_declare = prompt_for_choice(set(self.cards_names))
+        question = 'What do you announce?'
+        choices = set(self.cards_names)
+        what_declare = input_for_choice(self.current_player, question, choices)
+
         logging.info('Player: ' + self.current_player.get_repr() + ' has declared ' 
                     + what_declare + '.')
 
         # for name, index in gen_next_players_list(self.method_from_players('index').items(), self.current_player.index):
         claimants = []
         for name in gen_next_players_list(self.players_names, self.current_player.index):
-            claim = prompt_for_confirmation('{}, do you claim {} yourself?'.format(
-                                            self.players[name].get_repr(), what_declare))
+            question = '{}, do you claim {} yourself?'.format(
+                                            self.players[name].get_repr(), what_declare)
+            claim = input_for_confirmation(self.current_player, question)
             if claim:
                 claimants.append(name) 
                 logging.info('{} has claimed {}.'.format(self.players[name].get_repr(), what_declare))
@@ -138,6 +136,10 @@ class Board(object):
                     self.players[name].gold -= 1 
                     self.court += 1
                     logging.info('{} lied. He really is a {}, not a {}.'.format(self.players[name].get_repr(), self.players[name].card.name, what_declare))
+        else:
+            # TO NIE DZIALA BO GRA SIE KARTA POSIADANA A NIE ANNOUNCMENTOWANA
+            # TRZEBA PRZEPISAC KARTY, PLAY_CARD ORAZ TE METODE
+            self.current_player.play_card(self)
 
     def next_player(self):
         self.current_player = self.players.items()[(self.current_player.index + 1) % self.players_num][1]

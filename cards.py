@@ -11,31 +11,27 @@ class Card(object):
 
 class King(Card):
     name = "King"
-
     @staticmethod
     def logic(player, board):
         player.gold += 3
 
 class Queen(Card):
     name = "Queen"
-
     @staticmethod
     def logic(player, board):
         player.gold += 2
 
 class Bishop(Card):
     name = "Bishop"
-
     @staticmethod
     def logic(player, board):
         name_richest = board.max_rich_player()[0].name
         board.players[name_richest].gold -= 2
         player.gold += 2
-        # a co jesli on jest najbohatszy? eh
+        # a co jesli on jest najbogatszy? eh
 
 class Judge(Card):
     name = "Judge"
-
     @staticmethod
     def logic(player, board):
         player.gold += board.court

@@ -15,4 +15,4 @@ class SimpleBot(object):
         self.public_history = None
 
     def get_move(self, type_of_move, question, choices=None):
-        pass
+        raise NotImplementedError

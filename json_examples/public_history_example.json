@@ -4,6 +4,7 @@
         "players_num" : 4,
         "players" : [
             {
+                "id" : 0,
                 "name" : "Tom",
                 "type" : "human",
                 "properties" : [],
@@ -11,6 +12,7 @@
                 },
                     
             {
+                "id" : 1,
                 "name" : "Mark",
                 "type" : "bot",
                 "properties" : [
@@ -20,6 +22,7 @@
                 },
         
             {
+                "id" : 2,
                 "name" : "Chris",
                 "type" : "bot",
                 "properties" : [
@@ -29,6 +32,7 @@
                 },
             
             {
+                "id" : 3,
                 "name" : "Eric",
                 "type" : "bot",
                 "properties" : [
@@ -46,12 +50,12 @@
         },
     "moves": [
         {
-            "id" : 1,
+            "id" : 0,
             "player" : "Tom",
             "type": "PEEK"
         },
         {
-            "id" : 2,
+            "id" : 1,
             "player" : "Mark",
             "type": "ANNOUNCE",  
             "move" : {                      
@@ -72,7 +76,7 @@
                 }
         },
         {
-            "id" : 3,
+            "id" : 2,
             "player" : "Chris",
             "type": "EXCHANGE",   
             "move" : {
@@ -80,7 +84,7 @@
                 }
         },
         {
-            "id" : 4,
+            "id" : 3,
             "player" : "Eric",
             "type": "ANNOUNCE",   
             "move" : {                     
