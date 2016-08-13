@@ -139,10 +139,7 @@ class Board(object):
                     self.court += 1
                     logging.info('{} lied. He really is a {}, not a {}.'.format(self.players[name].get_repr(), self.players[name].card.name, what_declare))
         else:
-            # TO NIE DZIALA BO GRA SIE KARTA POSIADANA A NIE ANNOUNCMENTOWANA
-            # TRZEBA PRZEPISAC KARTY, PLAY_CARD ORAZ TE METODE
             self.current_player.play_card(self, cards.cards[what_declare])
-            # self.current_player.play_card(self)
 
     def next_player(self):
         self.current_player = self.players.items()[(self.current_player.index + 1) % self.players_num][1]
