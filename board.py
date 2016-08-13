@@ -52,7 +52,7 @@ class Board(object):
         self.cards_names = cards_names
         self.players = OrderedDict()
         for index, (Bot, name, card_name) in enumerate(zip(self.types_of_players, self.players_names, self.cards_names)):
-            self.players[name] = Player(index, Bot(), name, cards.cards[card_name](), start_gold)
+            self.players[name] = Player(index, Bot(), name, cards.cards[card_name], start_gold)
         self.current_player = self.players.items()[0][1]
         self.court = 0
         self.round_num = 0
@@ -133,13 +133,16 @@ class Board(object):
                     self.players[name].play_card(self)
                     logging.info('{} said the truth. He is a {}.'.format(self.players[name].get_repr(), what_declare))
                 else:
+                    # ZA WCZESNIE PRZEKAZUJE PIENIADZE
+                    # POWINNIEN PRZEKAZAC POZNIEJ BO INACZEJ JUDGE WEZMIE
                     self.players[name].gold -= 1 
                     self.court += 1
                     logging.info('{} lied. He really is a {}, not a {}.'.format(self.players[name].get_repr(), self.players[name].card.name, what_declare))
         else:
             # TO NIE DZIALA BO GRA SIE KARTA POSIADANA A NIE ANNOUNCMENTOWANA
             # TRZEBA PRZEPISAC KARTY, PLAY_CARD ORAZ TE METODE
-            self.current_player.play_card(self)
+            self.current_player.play_card(self, cards.cards[what_declare])
+            # self.current_player.play_card(self)
 
     def next_player(self):
         self.current_player = self.players.items()[(self.current_player.index + 1) % self.players_num][1]

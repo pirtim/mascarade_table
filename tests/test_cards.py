@@ -16,31 +16,27 @@ class Test_Cards(unittest.TestCase):
         self.b = Board(3,human_vec(3), ['Tom','Ben','Mat'], ['King', 'Queen', 'King'], 6)
         self.p = self.b.players['Tom']
 
-    def test_logic_isfunction(self):
-        for card_name, card_cls in cards.iteritems():
-            logic = card_cls().logic
-            self.assertIsInstance(logic, FunctionType)
+    def test_card_isfunction(self):
+        for card in cards.values():
+            self.assertIsInstance(card, FunctionType)
 
     def test_King(self):
-        card = King()
-        logic = card.logic
+        card = King
         self.assertEqual(card.name, 'King')
-        logic(self.p, self.b)
+        card(self.p, self.b)
         self.assertEqual(self.p.gold, 9)
 
     def test_Queen(self):
-        card = Queen()
-        logic = card.logic
+        card = Queen
         self.assertEqual(card.name, 'Queen')
-        logic(self.p, self.b)
+        card(self.p, self.b)
         self.assertEqual(self.p.gold, 8)
 
     def test_Bishop(self):
         self.assertEqual(self.p.gold, 6)
-        card = Bishop()
-        logic = card.logic
+        card = Bishop
         self.assertEqual(card.name, 'Bishop')
-        logic(self.p, self.b)
+        card(self.p, self.b)
         self.assertEqual(self.p.gold, 8)
 
 

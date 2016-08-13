@@ -2,66 +2,49 @@
 from __future__ import division
 from inputs import input_for_confirmation, input_for_choice
 
-# mozna sobie odpuscic klasy i zrobic to jako zwyczajne funkcje
+# Mozna zrobic tak zeby tylko raz bylo imie wpisywane w nazwie funkcji
 
-class Card(object):
-    logic = lambda x: None
-    def get_logic(self):
-        return lambda x: None
+def King(player, board):
+    player.gold += 3
+King.name = "King"
 
-class King(Card):
-    name = "King"
-    @staticmethod
-    def logic(player, board):
-        player.gold += 3
+def Queen(player, board):
+    player.gold += 2
+Queen.name = "Queen"
 
-class Queen(Card):
-    name = "Queen"
-    @staticmethod
-    def logic(player, board):
-        player.gold += 2
+def Bishop(player, board):
+    name_richest = board.max_rich_player()[0].name
+    board.players[name_richest].gold -= 2
+    player.gold += 2
+    # a co jesli on jest najbogatszy? eh
+Bishop.name = "Bishop"
 
-class Bishop(Card):
-    name = "Bishop"
-    @staticmethod
-    def logic(player, board):
-        name_richest = board.max_rich_player()[0].name
-        board.players[name_richest].gold -= 2
-        player.gold += 2
-        # a co jesli on jest najbogatszy? eh
+def Judge(player, board):
+    player.gold += board.court
+    board.court = 0
+Judge.name = "Judge"
 
-class Judge(Card):
-    name = "Judge"
-    @staticmethod
-    def logic(player, board):
-        player.gold += board.court
-        board.court = 0
+def Thief(player, board):
+    board.before_player.gold -= 1
+    board.next_player.gold -= 1
+    player.gold += 2
+Thief.name = "Thief"
 
-class Thief(Card):
-    name = "Thief"
-    @staticmethod
-    def logic(player, board):
-        board.before_player.gold -= 1
-        board.next_player.gold -= 1
-        player.gold += 2
+def Cheat(player, board):
+    board.check_end_condition(cheat = True, cheat_player = player)
+Cheat.name = "Cheat"
 
-class Cheat(Card):
-    name = "Cheat"
-    @staticmethod
-    def logic(player, board):
-        board.check_end_condition(cheat = True, cheat_player = player)
+def Witch(player, board):
+    second_player = input_for_choice(player, 'Which player?', board.players_names)
+    player.gold, second_player.gold = second_player.gold, player.gold
+Witch.name = "Witch"
 
-class Witch(Card):
-    name = "Witch"
-    @staticmethod
-    def logic(player, board, second_player):
-        player.gold, second_player.gold = second_player.gold, player.gold
-
-class Spy(Card):
-    name = "Spy"
-    @staticmethod
-    def logic(player, board, second_player, execute):
-        board.potential_exchange(second_player, execute)
+def Spy(player, board):
+    # przepisac z potential_exchange_handler
+    second_player = input_for_choice(player, 'Which player?', board.players_names)
+    execute = input_for_confirmation(player, question='Execute?')
+    board.potential_exchange(second_player, execute)
+Spy.name = "Spy"
 
 cards = {
     'King' : King,
