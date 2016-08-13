@@ -2,9 +2,6 @@
 from __future__ import division
 
 import logging
-from collections import namedtuple, OrderedDict
-import operator
-import functools
 
 class Human(object):
     def __init__(self):

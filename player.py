@@ -5,7 +5,6 @@ import logging
 from collections import namedtuple, OrderedDict
 import cards
 import operator
-# from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
 from inputs import input_for_confirmation, input_for_choice
 
 class Player(object):
@@ -24,15 +23,11 @@ class Player(object):
         self.card.logic(self, board)
 
     def potential_exchange_handler(self, players, players_names):   
-        # print 'Which player?'
-        # second_player = prompt_for_choice(players_names)
-
         question = 'Which player?'
         choices = players_names
         second_player = input_for_choice(self, question, choices)
 
-        second_player = players[second_player]
-        # execute = prompt_for_confirmation('Execute?')        
+        second_player = players[second_player]     
         execute = input_for_confirmation(self, question='Execute?')
         
         logging.info('Player: '

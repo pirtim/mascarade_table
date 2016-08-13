@@ -22,7 +22,6 @@ class Test_Player(unittest.TestCase):
         self.sp = player.Player(1, Human(), 'Mark', Queen(), 6)
         self.players_names = ['Tom', 'Mark']
         self.players = OrderedDict(zip(self.players_names,[self.p, self.sp]))
-        # help_set_up()
 
     def test___init__(self):        
         self.assertEqual(self.p.index, 0)
@@ -42,11 +41,7 @@ class Test_Player(unittest.TestCase):
 
 #~ http://stackoverflow.com/questions/6271947/how-can-i-simulate-input-to-stdin-for-pyunit
     def test_potential_exchange_handler(self):
-        self.p.potential_exchange = Mock()
-        # with patch.object(player, 'prompt_for_choice', create=True, return_value='Mark'):
-        #     with patch.object(player, 'prompt_for_confirmation', create=True, return_value=True):
-        #         self.p.potential_exchange_handler(self.players, self.players_names)
-        
+        self.p.potential_exchange = Mock()        
         with patch.object(inputs, 'prompt_for_choice', create=True, return_value='Mark'):
             with patch.object(inputs, 'prompt_for_confirmation', create=True, return_value=True):
                 self.p.potential_exchange_handler(self.players, self.players_names)
@@ -72,7 +67,6 @@ class Test_Player(unittest.TestCase):
 
     def tearDown(self):
         pass
-        # help_tear_down()
 
 if __name__ == '__main__':
     unittest.main()
