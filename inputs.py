@@ -4,6 +4,9 @@ from bots import Human
 
 from humanfriendly.prompts import prompt_for_confirmation, prompt_for_choice
 
+class BotError(Exception):
+    pass
+
 def input_for_confirmation(player, question):
     if isinstance(player.bot, Human):
         return prompt_for_confirmation(question)
@@ -15,4 +18,6 @@ def input_for_choice(player, question, choices):
         print question
         return prompt_for_choice(choices)
     else:
-        return player.bot.get_move('choices', question, choices)
+        result = player.bot.get_move('choices', question, choices)
+        if result not in choices:
+            raise BotError('Bot\'s choice is not on the list of permitted choices.')

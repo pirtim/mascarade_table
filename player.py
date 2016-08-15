@@ -17,6 +17,7 @@ class Player(object):
         self.history = None
 
     def peek_card(self):
+        print 'Your card is {}.'.format(self.card.name)
         logging.info('Player: ' + self.get_repr() + ' has peeeked.')
 
     def play_card(self, board, card = None):

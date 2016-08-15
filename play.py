@@ -45,7 +45,8 @@ def play(players_num, types_of_players, players_names=None, cards_names=None, st
     mygame = Board(players_num, types_of_players, players_names, cards_names, start_gold)
     end_of_game = False
     while not end_of_game:
-        end_of_game = mygame.next_step()
+        end_of_game, history_of_game = mygame.next_step()
+    return history_of_game
 
 if __name__ == "__main__":
     import doctest

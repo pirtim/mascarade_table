@@ -17,10 +17,6 @@ OrderedDictPlayers = OrderedDict
 OrderedDictPlayers.items_p = lambda self: [PlayerVal(key, val) for key, val in self.items()]
 OrderedDictPlayers.iteritems_p = lambda self: (PlayerVal(key, val) for key, val in self.iteritems())
 
-class PublicBoard(object):
-    def __init__(self, players_with_gold, public_history):
-        self.players_with_gold = players_with_gold
-        self.public_history = public_history
 
 # PublicBoard = namedtuple('PublicBoard', ['players_with_gold'])
 
@@ -44,6 +40,14 @@ def gen_next_players_list(players_list, index):
     for i in players_list[:index]:
         yield i
 
+class PublicBoard(object):
+    def __init__(self, players_with_gold, public_history):
+        self.players_with_gold = players_with_gold
+        self.public_history = public_history
+
+class GameHistory(OrderedDict):
+    pass
+
 class Board(object):
     def __init__(self, players_num, types_of_players, players_names, cards_names, start_gold):
         self.players_num = players_num
@@ -56,12 +60,15 @@ class Board(object):
         self.current_player = self.players.items()[0][1]
         self.court = 0
         self.round_num = 0
-        self.public_history = None
-        self.true_history = None
+        self.public_history = GameHistory({})
+        self.true_history = GameHistory({})
         self.public_board = PublicBoard(self.method_from_players('gold'), self.public_history)
 
         for name, player in self.players.iteritems():
             player.bot.public_board = self.public_board
+    
+    def public_board_update(self):
+        self.public_board.players_with_gold = self.method_from_players('gold')
 
     # def get_public_board(self):
     #     '''
@@ -85,26 +92,28 @@ class Board(object):
         logging.info('Start of round number {}'.format(self.round_num))
         logging.debug('Players Cards: {}'.format(self.method_from_players('card.name')))
         logging.debug('Players Gold: {}'.format(self.method_from_players('gold')))
-    
+
         question = '{}, what do you do?'.format(self.current_player.get_repr())
         choices = ['PEEK', 'ANNOUNCE', 'EXCHANGE']
         decision = input_for_choice(self.current_player, question, choices)
 
-        if decision == 'PEEK':            
+        if decision == 'PEEK':
             self.current_player.peek_card()
         elif decision == 'ANNOUNCE':
             self.announcement()
         elif decision == 'EXCHANGE':
             self.current_player.potential_exchange_handler(self.players, self.players_names)
 
-        if self.check_end_condition():
+        if not self.true_history.has_key('game_result'):
+            self.check_end_condition()
+        if self.true_history.has_key('game_result'):
             logging.info('End of game at round number {}'.format(self.round_num))
             logging.info('Player {} won!'.format('Not Implemented'))
             logging.debug('Players Gold: {}'.format(self.method_from_players('gold')))
-            return True
+            return True, self.true_history
 
         self.next_player()
-        return False
+        return False, self.public_history
 
     def announcement(self):
         question = 'What do you announce?'
@@ -132,7 +141,9 @@ class Board(object):
                 if card_name == what_declare:
                     self.players[name].play_card(self)
                     logging.info('{} said the truth. He is a {}.'.format(self.players[name].get_repr(), what_declare))
-                else:
+            # tutaj powinien sprawdzac koniec gry
+            for name, card_name in claimants_with_cards.iteritems():
+                if card_name != what_declare:
                     # ZA WCZESNIE PRZEKAZUJE PIENIADZE
                     # POWINNIEN PRZEKAZAC POZNIEJ BO INACZEJ JUDGE WEZMIE
                     self.players[name].gold -= 1 
@@ -153,13 +164,39 @@ class Board(object):
         else:
             return OrderedDictPlayers([(name,rgetattr(self.players[name], method)) for name in players])
 
-    def check_end_condition(self):
-        'przepisac'
+    def check_end_condition(self, cheat_player = None):
+        if cheat_player != None:
+            if cheat_player.gold >= 10:
+                result = OrderedDict([
+                ('type_of_end', 'rich_win'),
+                ('name', cheat_player.name),
+                ('gold', cheat_player.gold),
+                ('info', 'cheat_win')
+                ])
+                self.true_history.update([('game_result', result)])
+                return True
+            else:
+                return False
+
         richest = self.max_rich_player()
         poorest = self.min_rich_player()
-        if richest[0].val >= 12:
+        if richest[0].val >= 13:
+            result = OrderedDict([
+                ('type_of_end', 'rich_win'),
+                ('name', richest[0].name),
+                ('gold', richest[0].val),
+                ('info', None)
+            ])
+            self.true_history.update([('game_result', result)])
             return True
         if poorest[0].val <= 0:
+            result = OrderedDict([
+                ('type_of_end', 'poor_win'),
+                ('name', richest[0].name),
+                ('gold', richest[0].val),
+                ('info', None)
+            ])
+            self.true_history.update([('game_result', result)])
             return True
         return False
 
