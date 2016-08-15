@@ -1,10 +1,9 @@
 Zalozenia*.txt
-_fabfile.py
 *.pyc
 .vscode
 *_gitignore
-.zfbrc.py
 play.log
 logging.log
-_test_worker_bucket.py
 .cache
+.coverage
+htmlcov

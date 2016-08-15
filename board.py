@@ -103,6 +103,9 @@ class Board(object):
             self.announcement()
         elif decision == 'EXCHANGE':
             self.current_player.potential_exchange_handler(self.players, self.players_names)
+        else:
+            raise ValueError('Wrong decision. Get: \'{}\'. Should be one from: {}.'.format(
+                decision, choices))
 
         if not self.true_history.has_key('game_result'):
             self.check_end_condition()
@@ -141,11 +144,9 @@ class Board(object):
                 if card_name == what_declare:
                     self.players[name].play_card(self)
                     logging.info('{} said the truth. He is a {}.'.format(self.players[name].get_repr(), what_declare))
-            # tutaj powinien sprawdzac koniec gry
+            # tutaj powinien sprawdzac koniec gry, a moze nie?
             for name, card_name in claimants_with_cards.iteritems():
                 if card_name != what_declare:
-                    # ZA WCZESNIE PRZEKAZUJE PIENIADZE
-                    # POWINNIEN PRZEKAZAC POZNIEJ BO INACZEJ JUDGE WEZMIE
                     self.players[name].gold -= 1 
                     self.court += 1
                     logging.info('{} lied. He really is a {}, not a {}.'.format(self.players[name].get_repr(), self.players[name].card.name, what_declare))
@@ -174,9 +175,7 @@ class Board(object):
                 ('info', 'cheat_win')
                 ])
                 self.true_history.update([('game_result', result)])
-                return True
-            else:
-                return False
+            return
 
         richest = self.max_rich_player()
         poorest = self.min_rich_player()
@@ -188,7 +187,8 @@ class Board(object):
                 ('info', None)
             ])
             self.true_history.update([('game_result', result)])
-            return True
+            return
+
         if poorest[0].val <= 0:
             result = OrderedDict([
                 ('type_of_end', 'poor_win'),
@@ -197,8 +197,7 @@ class Board(object):
                 ('info', None)
             ])
             self.true_history.update([('game_result', result)])
-            return True
-        return False
+            return
 
     def max_rich_player(self, all_players = False):
         '''Returns list(tuple(richest_player1, his_gold),tuple(richest_player2, his_gold),...)'''

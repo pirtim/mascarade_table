@@ -2,7 +2,7 @@ import unittest
 import datetime
 import uuid
 import logging
-from collections import namedtuple
+from collections import namedtuple, OrderedDict
 
 from .helper_test import *
 from ..player import Player
@@ -14,14 +14,30 @@ class Test_Board(unittest.TestCase):
         self.b = Board(3, human_vec(3), ['Tom','Ben','Mat'], ['King', 'Queen', 'King'],  6)
 
     def test_end_condition_over(self):
-        self.assertFalse(self.b.check_end_condition())
+        self.assertFalse(self.b.true_history.has_key('game_result'))
         self.b.players['Tom'].gold = 13
-        self.assertTrue(self.b.check_end_condition())
+        self.b.check_end_condition()
+        self.assertTrue(self.b.true_history.has_key('game_result'))
+        game_result = OrderedDict([
+            ('type_of_end', 'rich_win'),
+            ('name', 'Tom'),
+            ('gold', 13),
+            ('info', None)
+            ])
+        self.assertEqual(self.b.true_history['game_result'], game_result)
 
-    def test_end_condition_under(self):
-        self.assertFalse(self.b.check_end_condition())
+    def test_end_condition_under(self):        
+        self.assertFalse(self.b.true_history.has_key('game_result'))
         self.b.players['Tom'].gold = 0
-        self.assertTrue(self.b.check_end_condition())
+        self.b.check_end_condition()
+        self.assertTrue(self.b.true_history.has_key('game_result'))
+        game_result = OrderedDict([
+            ('type_of_end', 'poor_win'),
+            ('name', 'Ben'),
+            ('gold', 6),
+            ('info', None)
+            ])
+        self.assertEqual(self.b.true_history['game_result'], game_result)
 
     def test_max_rich_player1(self):
         result = self.b.max_rich_player()

@@ -104,5 +104,27 @@ class Test_human_play_1(unittest.TestCase):
                     ])
                 self.assertEqual(result['game_result'], game_result)
 
+    def test_normal_play_5(self):
+        N = 6        
+        choices =  ['EXCHANGE', 'Adam', 'PEEK', 'PEEK', 'PEEK', 'PEEK', 'PEEK']
+        choices += ['ANNOUNCE', 'King', 'PEEK', 'PEEK', 'PEEK', 'PEEK', 'PEEK']
+        choices += ['ANNOUNCE', 'King', 'PEEK', 'PEEK', 'PEEK', 'PEEK', 'PEEK']
+        choices += ['ANNOUNCE', 'Cheat']
+        confirmation = [True]
+        confirmation += [False]*5*2
+        confirmation += [True]*5
+        with patch.object(inputs, 'prompt_for_choice', create=True, side_effect=choices):
+            with patch.object(inputs, 'prompt_for_confirmation', create=True, side_effect=confirmation): 
+                my_minds = ['human'] * N
+                cards_names = ['King', 'Queen', 'Bishop', 'Judge', 'Cheat', 'Witch']
+                result = play(players_num=N,  types_of_players=my_minds, cards_names=cards_names)
+                game_result = OrderedDict([
+                    ('type_of_end', 'rich_win'),
+                    ('name', 'Chris'),
+                    ('gold', 12),
+                    ('info', 'cheat_win')
+                    ])
+                self.assertEqual(result['game_result'], game_result)
+
 if __name__ == '__main__':
     unittest.main()
