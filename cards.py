@@ -19,7 +19,7 @@ def Bishop(player, board):
         name_richest = richest_vec[0].name        
     elif len(richest_vec) > 1:
         richest_vec = map(lambda (name, gold): name, richest_vec)
-        name_richest = input_for_choice(player, 'Which player?', richest_vec)
+        name_richest = input_for_choice(player, 'bishop_who', richest_vec, 'Which player?')
     else:
         raise ValueError('Not enough players.')
 
@@ -45,14 +45,14 @@ def Cheat(player, board):
 
 def Witch(player, board):
     'The Witch can swap all of her fortune with that of another player of their choice.'
-    second_player = input_for_choice(player, 'Which player?', board.players_names)
+    second_player = input_for_choice(player, 'witch_who', board.players_names, 'Which player?')
     second_player = board.players[second_player]
     player.gold, second_player.gold = second_player.gold, player.gold
 
 def Spy(player, board):
     # przepisac z potential_exchange_handler
-    second_player = input_for_choice(player, 'Which player?', board.players_names)
-    execute = input_for_confirmation(player, question='Execute?')
+    second_player = input_for_choice(player, 'spy_swap_who', board.players_names, 'Which player?')
+    execute = input_for_confirmation(player, 'spy_swap_exe', question='Execute?')
     board.potential_exchange(second_player, execute)
  
 cards = {

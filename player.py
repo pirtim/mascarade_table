@@ -29,10 +29,10 @@ class Player(object):
     def potential_exchange_handler(self, players, players_names):   
         question = 'Which player?'
         choices = players_names
-        second_player = input_for_choice(self, question, choices)
+        second_player = input_for_choice(self, 'swap_who', choices, question)
 
         second_player = players[second_player]     
-        execute = input_for_confirmation(self, question='Execute?')
+        execute = input_for_confirmation(self, 'swap_exe', question='Execute?')
         
         logging.info('Player: '
             + self.get_repr()

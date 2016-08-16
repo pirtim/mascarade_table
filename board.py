@@ -17,7 +17,6 @@ OrderedDictPlayers = OrderedDict
 OrderedDictPlayers.items_p = lambda self: [PlayerVal(key, val) for key, val in self.items()]
 OrderedDictPlayers.iteritems_p = lambda self: (PlayerVal(key, val) for key, val in self.iteritems())
 
-
 # PublicBoard = namedtuple('PublicBoard', ['players_with_gold'])
 
 # http://stackoverflow.com/a/31174427
@@ -95,7 +94,7 @@ class Board(object):
 
         question = '{}, what do you do?'.format(self.current_player.get_repr())
         choices = ['PEEK', 'ANNOUNCE', 'EXCHANGE']
-        decision = input_for_choice(self.current_player, question, choices)
+        decision = input_for_choice(self.current_player, 'move', choices, question)
 
         if decision == 'PEEK':
             self.current_player.peek_card()
@@ -121,7 +120,7 @@ class Board(object):
     def announcement(self):
         question = 'What do you announce?'
         choices = set(self.cards_names)
-        what_declare = input_for_choice(self.current_player, question, choices)
+        what_declare = input_for_choice(self.current_player, 'what_announce', choices, question)
 
         logging.info('Player: ' + self.current_player.get_repr() + ' has declared ' 
                     + what_declare + '.')
@@ -130,7 +129,7 @@ class Board(object):
         for name in gen_next_players_list(self.players_names, self.current_player.index):
             question = '{}, do you claim {} yourself?'.format(
                                             self.players[name].get_repr(), what_declare)
-            claim = input_for_confirmation(self.current_player, question)
+            claim = input_for_confirmation(self.current_player, 'claim', question)
             if claim:
                 claimants.append(name) 
                 logging.info('{} has claimed {}.'.format(self.players[name].get_repr(), what_declare))
