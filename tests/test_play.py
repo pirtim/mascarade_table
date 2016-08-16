@@ -56,8 +56,7 @@ class Test_human_play_1(unittest.TestCase):
                 self.assertEqual(result['game_result'], game_result)
 
     def test_normal_play_2(self):
-        choices = ['ANNOUNCE','King', 'PEEK', 'PEEK']*3
-        confirmation = [True, True]*3
+        choices, confirmation = input_seperation(['ANNOUNCE','King', True, True, 'PEEK', 'PEEK']*3)
         with patch.object(inputs, 'prompt_for_choice', create=True, side_effect=choices):
             with patch.object(inputs, 'prompt_for_confirmation', create=True, side_effect=confirmation):
                 result = play(3, ['human']*3, ['Tom', 'Bob', 'Mat'], ['King', 'Queen', 'Bishop'])

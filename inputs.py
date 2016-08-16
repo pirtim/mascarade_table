@@ -11,7 +11,10 @@ def input_for_confirmation(player, question):
     if isinstance(player.bot, Human):
         return prompt_for_confirmation(question)
     else:
-        return player.bot.get_move('confirmation', question)
+        result = player.bot.get_move('confirmation', question)
+        if type(result) != bool:
+            raise BotError('Bot\'s choice is not bool type.')
+        return result
 
 def input_for_choice(player, question, choices):
     if isinstance(player.bot, Human):
@@ -21,3 +24,4 @@ def input_for_choice(player, question, choices):
         result = player.bot.get_move('choices', question, choices)
         if result not in choices:
             raise BotError('Bot\'s choice is not on the list of permitted choices.')
+        return result

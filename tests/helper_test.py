@@ -42,3 +42,12 @@ local_hostname = subprocess.check_output(["hostname"]).strip()
 
 def human_vec(n):
     return n*[Human]
+
+def input_seperation(input_list):
+    choice, confirmation = [], []
+    for i in input_list:
+        if type(i) == bool:
+            confirmation.append(i)
+        else:
+            choice.append(i)
+    return choice, confirmation

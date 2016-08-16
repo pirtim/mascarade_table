@@ -126,7 +126,6 @@ class Board(object):
         logging.info('Player: ' + self.current_player.get_repr() + ' has declared ' 
                     + what_declare + '.')
 
-        # for name, index in gen_next_players_list(self.method_from_players('index').items(), self.current_player.index):
         claimants = []
         for name in gen_next_players_list(self.players_names, self.current_player.index):
             question = '{}, do you claim {} yourself?'.format(
@@ -166,6 +165,8 @@ class Board(object):
             return OrderedDictPlayers([(name,rgetattr(self.players[name], method)) for name in players])
 
     def check_end_condition(self, cheat_player = None):
+        # powinna powodowac koniec petli bezposrednio a nie posrednio przez zmiane zmiennej,
+        # sprawdzanej pozniej
         if cheat_player != None:
             if cheat_player.gold >= 10:
                 result = OrderedDict([
